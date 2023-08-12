@@ -1,6 +1,5 @@
 'use client';
 import Image from 'next/image';
-import { toast } from 'react-hot-toast';
 import { X } from 'lucide-react';
 
 import IconButton from "@/components/ui/icon-button";
@@ -8,6 +7,7 @@ import Currency from '@/components/ui/Currency';
 
 import useCart from '@/hooks/useCart';
 import { Product } from "@/types";
+import { useEffect, useState } from 'react';
 
 interface CartItemProps {
   data: Product;
@@ -16,7 +16,14 @@ interface CartItemProps {
 const CartItem: React.FC<CartItemProps> = ({
   data
 }) => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const cart = useCart();
+  if (!isMounted) {
+    return null;
+  }
   const onRemove = () => {
     cart.removeItem(data.id);
   };
